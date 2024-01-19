@@ -4,16 +4,17 @@ import com.vicheanath.waa.dto.PostDTO;
 import com.vicheanath.waa.entity.Post;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostService {
 
     List<PostDTO> findAll();
 
-    PostDTO findById(Long id);
+    Optional<PostDTO> findById(Integer id);
 
-    void save(Post post);
+    Optional<PostDTO> save(PostDTO post);
 
-    void update(Long id, PostDTO postDTO);
+    Optional<PostDTO> update(Integer id, PostDTO postDTO);
 
-    void deleteById(Long id);
+    void deleteById(Integer id);
 }
