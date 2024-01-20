@@ -13,4 +13,6 @@ public interface PostRepository extends JpaRepository<Post,Integer> {
 
     Optional<Post> findById(Integer id);
 
+    List<Post> findByTitleContaining(String title);
+
 }

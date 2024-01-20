@@ -1,7 +1,9 @@
 package com.vicheanath.waa.controller;
 
 
+import com.vicheanath.waa.dto.CommentsDTO;
 import com.vicheanath.waa.dto.PostDTO;
+import com.vicheanath.waa.dto.PostWithCommentsDTO;
 import com.vicheanath.waa.entity.Post;
 import com.vicheanath.waa.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,8 @@ public class PostController {
 
     private final PostService postService;
     @GetMapping
-    public ResponseEntity<List<PostDTO>> findAll() {
-        return ResponseEntity.ok(postService.findAll());
+    public ResponseEntity<List<PostDTO>> findAll( @RequestParam(value = "containsTitle", required = false) String containsTitle) {
+        return ResponseEntity.ok(postService.findAll(containsTitle));
     }
 
 
@@ -49,5 +51,11 @@ public class PostController {
     public ResponseEntity<Objects> deleteById(@PathVariable Integer id) {
         postService.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/comments")
+    public ResponseEntity<CommentsDTO> addComment(@RequestBody CommentsDTO commentsDTO, @PathVariable Integer id) {
+        Optional<CommentsDTO> post = postService.addComment(id, commentsDTO);
+        return post.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }
