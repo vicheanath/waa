@@ -1,5 +1,6 @@
 package com.vicheanath.waa.controller;
 
+import com.vicheanath.waa.dto.CommentsDTO;
 import com.vicheanath.waa.dto.PostDTO;
 import com.vicheanath.waa.dto.UserDTO;
 import com.vicheanath.waa.dto.UserWithListPostDTO;
@@ -20,8 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public ResponseEntity<List<UserDTO>> findAll() {
-        return ResponseEntity.ok(userService.findAll());
+    public ResponseEntity<List<UserWithListPostDTO>> findAll(@RequestParam(value = "numPosts",required = false) Integer numPosts) {
+        return ResponseEntity.ok(userService.findAll(numPosts));
     }
 
     @GetMapping("/findMoreThanOnePost")

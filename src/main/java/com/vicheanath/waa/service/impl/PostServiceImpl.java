@@ -1,8 +1,11 @@
 package com.vicheanath.waa.service.impl;
 
+import com.vicheanath.waa.dto.CommentsDTO;
 import com.vicheanath.waa.dto.PostDTO;
+import com.vicheanath.waa.entity.Comments;
 import com.vicheanath.waa.entity.Post;
 import com.vicheanath.waa.mapper.ListMapper;
+import com.vicheanath.waa.repository.CommentsRepository;
 import com.vicheanath.waa.repository.PostRepository;
 import com.vicheanath.waa.service.PostService;
 import lombok.AllArgsConstructor;
@@ -18,11 +21,15 @@ import java.util.Optional;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final CommentsRepository commentsRepository;
     private final ModelMapper modelMapper;
     private final ListMapper listMapper;
     @Override
-    public List<PostDTO> findAll() {
-        List<Post> posts = postRepository.findAll();
+    public List<PostDTO> findAll(String containsTitle) {
+        if (containsTitle == null) {
+            return listMapper.mapList(postRepository.findAll(),PostDTO.class);
+        }
+        List<Post> posts = postRepository.findByTitleContaining(containsTitle);
         return listMapper.mapList(posts,PostDTO.class);
     }
 
@@ -49,5 +56,17 @@ public class PostServiceImpl implements PostService {
     @Override
     public void deleteById(Integer id) {
         postRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<CommentsDTO> addComment(Integer id, CommentsDTO commentsDTO) {
+        Optional<Post> postOptional = postRepository.findById(id);
+        postOptional.ifPresent(post -> {
+            Comments comments = modelMapper.map(commentsDTO,Comments.class);
+            Comments comments1 = commentsRepository.save(comments);
+            post.getComments().add(comments1);
+            postRepository.save(post);
+        });
+        return Optional.of(commentsDTO);
     }
 }

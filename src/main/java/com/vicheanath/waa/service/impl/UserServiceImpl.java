@@ -1,10 +1,14 @@
 package com.vicheanath.waa.service.impl;
 
+import com.vicheanath.waa.dto.CommentsDTO;
 import com.vicheanath.waa.dto.PostDTO;
 import com.vicheanath.waa.dto.UserDTO;
 import com.vicheanath.waa.dto.UserWithListPostDTO;
+import com.vicheanath.waa.entity.Comments;
+import com.vicheanath.waa.entity.Post;
 import com.vicheanath.waa.entity.User;
 import com.vicheanath.waa.mapper.ListMapper;
+import com.vicheanath.waa.repository.CommentsRepository;
 import com.vicheanath.waa.repository.UserRepository;
 import com.vicheanath.waa.service.UserService;
 import lombok.AllArgsConstructor;
@@ -22,12 +26,15 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-
+    private final CommentsRepository commentsRepository;
     private final ModelMapper modelMapper;
 
     private final ListMapper listMapper;
-    public List<UserDTO> findAll() {
-        return listMapper.mapList(userRepository.findAll(),UserDTO.class);
+    public List<UserWithListPostDTO> findAll(Integer numPosts) {
+        if (numPosts == null) {
+            return listMapper.mapList(userRepository.findAll(),UserWithListPostDTO.class);
+        }
+        return listMapper.mapList(userRepository.findMoreThanNPosts(numPosts),UserWithListPostDTO.class);
     }
     @Override
     public UserDTO findById(Integer id) {
@@ -68,4 +75,5 @@ public class UserServiceImpl implements UserService {
         List<User> users = userRepository.findMoreThanOnePost();
         return listMapper.mapList(users,UserDTO.class);
     }
+
 }

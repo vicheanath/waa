@@ -1,6 +1,7 @@
 package com.vicheanath.waa.service;
 
 
+import com.vicheanath.waa.dto.CommentsDTO;
 import com.vicheanath.waa.dto.PostDTO;
 import com.vicheanath.waa.dto.UserDTO;
 import com.vicheanath.waa.dto.UserWithListPostDTO;
@@ -11,7 +12,7 @@ import java.util.Optional;
 
 public interface UserService {
 
-    List<UserDTO> findAll();
+    List<UserWithListPostDTO> findAll(Integer numPosts);
     UserDTO findById(Integer id);
 
     Optional<UserDTO> save(UserDTO user);
@@ -24,4 +25,5 @@ public interface UserService {
 
 
     List<UserDTO> findMoreThanOnePost();
+
 }
