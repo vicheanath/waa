@@ -1,5 +1,6 @@
 package com.vicheanath.waa.controller;
 
+import com.vicheanath.waa.aspect.annotation.ExecutionTime;
 import com.vicheanath.waa.dto.CommentsDTO;
 import com.vicheanath.waa.dto.PostDTO;
 import com.vicheanath.waa.dto.UserDTO;
@@ -20,6 +21,7 @@ public class UserController {
 
     private final UserService userService;
 
+
     @GetMapping
     public ResponseEntity<List<UserWithListPostDTO>> findAll(@RequestParam(value = "numPosts",required = false) Integer numPosts) {
         return ResponseEntity.ok(userService.findAll(numPosts));
@@ -35,6 +37,7 @@ public class UserController {
         return userDTO.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @ExecutionTime
     @GetMapping("/{id}")
     public ResponseEntity<UserDTO> findById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.findById(id));
