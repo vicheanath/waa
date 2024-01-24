@@ -1,6 +1,7 @@
 package com.vicheanath.waa.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -22,11 +23,20 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name;
+    @Column(unique = true)
+    private String email;
+    @JsonIgnore
+    private String password;
+
     @OneToMany(cascade = CascadeType.ALL)
     @Fetch(FetchMode.SELECT)
     @JsonManagedReference
     @JoinColumn(name = "user_id")
     @BatchSize(size = 5)
     private List<Post> posts;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable
+    private List<Role> roles;
 
 }

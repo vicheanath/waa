@@ -14,6 +14,7 @@ import com.vicheanath.waa.service.UserService;
 import lombok.AllArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Iterator;
@@ -28,6 +29,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final CommentsRepository commentsRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
     private final ListMapper listMapper;
     public List<UserWithListPostDTO> findAll(Integer numPosts) {
@@ -43,7 +45,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserDTO> save(UserDTO user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User user1 = modelMapper.map(user,User.class);
+
+
+
+
         return Optional.of(modelMapper.map(userRepository.save(user1),UserDTO.class));
     }
 
