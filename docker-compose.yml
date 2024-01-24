@@ -16,6 +16,37 @@ services:
     networks:
       - postgres
     restart: unless-stopped
+
+  keydb:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: waa
+    volumes:
+      - postgres:/data/postgres
+    ports:
+      - "5433:5432"
+    networks:
+      - postgres
+    restart: unless-stopped
+
+  keycloak:
+    image: jboss/keycloak
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: keycloak
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_PORT: 5433
+    ports:
+      - "8088:8080"
+    networks:
+      - postgres
+    restart: unless-stopped
 networks:
   postgres:
     driver: bridge

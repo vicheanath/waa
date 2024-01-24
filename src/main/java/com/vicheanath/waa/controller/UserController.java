@@ -43,6 +43,11 @@ public class UserController {
         return ResponseEntity.ok(userService.findById(id));
     }
 
+    @GetMapping("/admin")
+    public ResponseEntity<List<UserDTO>> findAllAdmin() {
+        return ResponseEntity.ok(userService.findMoreThanOnePost());
+    }
+
     @GetMapping("/{id}/posts")
     public ResponseEntity<UserWithListPostDTO> findPostsByUserId(@PathVariable("id") Integer id) {
         System.out.println("id = " + id);
@@ -61,6 +66,8 @@ public class UserController {
         return ResponseEntity.ok().build();
 
     }
+
+
 
 
 
